@@ -36,6 +36,7 @@ namespace MatchDayAnalyzerFinal.Controllers
 
             var team = await _context.Teams
                 .Include(t => t.Season)
+                .Include(t => t.PlayersInTeam)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (team == null)
             {
