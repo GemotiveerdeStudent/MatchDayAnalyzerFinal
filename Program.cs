@@ -18,6 +18,7 @@ builder.Services.AddRazorPages();
 
 // API documentatie
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 // builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -27,6 +28,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
 
+    // Api Documentatie 
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
 }
 else
