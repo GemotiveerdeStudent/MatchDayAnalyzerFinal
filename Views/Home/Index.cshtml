@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>
+        Recentelijk heeft Nigel Geerlings Fanclub een bijzonder moment van trots beleefd toen een van hun teamleden en tevens
+        organisator van de competitie werd uitgenodigd voor een interview op TV Maastricht. Het was een eerbetoon aan de inzet en
+        vaardigheden van het team, en de fans waren vol trots om te zien hoe hun club schitterde op de televisie.
+    </p>
+
+    <video id="myVideo" width="640" height="360" controls>
+        <source src="https://6nrisj1dfv2r.b-cdn.net/425531e7-c2d2-4f72-afbd-7b064f3768ed_1080.mp4" type="video/mp4" />
+    </video>
+    <script>
+        document.getElementById('myVideo').addEventListener('loadedmetadata', function () {
+            this.currentTime = 25 * 60 + 45; // Set start time to 25:45 (in seconds)
+        });
+    </script>
+
+    <h3>Zoek naar spelers die meer hebben gescoord dan de ingevoerde waarde.</h3>
+    <form asp-action="ScoredMoreGoalsThan" method="GET">
+        <input name="goalsSearch" placeholder="Zoek naar een aantal" />
+        <input type="submit" />
+    </form>
+
+    <p>
+        Ben je meer geinterreseerd in de swagger view? klik op de volgende link :
+
+    </p><a href="https://localhost:5001/swagger/index.html">Swagger View</a>
+
+
+
+</div>

@@ -1,0 +1,58 @@
+﻿@using MatchDayAnalyzerFinal.Models.ClassModels
+@model IEnumerable<Player>
+@{
+    string title = " Spelers die meer hebben gescoord dan de ingevoerde waarde " + ViewData["MaxPrice"];
+    ViewData["title"] = "Prachtige zoekfunctie";
+}
+
+<h2>@title</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <div>No items found.</div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Team Name</th>
+                <th>Player's Name</th>
+                <th>Player's Position</th>
+                <th>Goal Scored</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (Player player in Model)
+            {
+                <tr>
+                    <td>
+                        @if (player.Team != null)
+                        {
+                            @Html.DisplayFor(modelItem => player.Team.Name)
+                        }
+                    </td>
+                    <td>
+                        @if (player.Name != null)
+                        {
+                            @Html.DisplayFor(modelItem => player.Name)
+                        }
+                    </td>
+                    <td>
+                        @if (player.Position != null)
+                        {
+                            @Html.DisplayFor(modelItem => player.Position)
+                        }
+                    </td>
+                    <td>
+                        @if (player.TotalGoals.HasValue)
+                        {
+                            @Html.DisplayFor(modelItem => player.TotalGoals, new { DataFormatString = "{0:C}" })
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

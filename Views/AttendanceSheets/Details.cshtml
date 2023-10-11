@@ -1,0 +1,48 @@
+﻿@model MatchDayAnalyzerFinal.Models.ClassModels.AttendanceSheet
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>AttendanceSheet</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Attend)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Attend)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PriceToPayPerPlayer)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PriceToPayPerPlayer)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MatchGoal)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MatchGoal)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Player)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Player.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Game)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Game.OpponentTeam)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

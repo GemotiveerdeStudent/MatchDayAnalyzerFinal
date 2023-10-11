@@ -1,0 +1,70 @@
+﻿@model MatchDayAnalyzerFinal.Models.ClassModels.Team
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Team</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Season)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Season.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TeamPicture)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TeamPicture)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+<div class="col">
+    <h3>Players in Team</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Player Name</th>
+                <th>Position</th>
+                <th>Total Goals</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.PlayersInTeam != null)
+            {
+                @foreach (var player in Model.PlayersInTeam)
+                {
+                    @if (player != null)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => player.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => player.Position)</td>
+                            <td>@Html.DisplayFor(modelItem => player.TotalGoals)</td>
+                        </tr>
+                    }
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3">No players in the team.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
