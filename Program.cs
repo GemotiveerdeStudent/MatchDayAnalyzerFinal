@@ -10,7 +10,9 @@ builder.Services.AddDbContext<MatchAnalyzerDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+// Login functionalities
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>() // enable role management
     .AddEntityFrameworkStores<MatchAnalyzerDbContext>();
 builder.Services.AddControllersWithViews();
 
