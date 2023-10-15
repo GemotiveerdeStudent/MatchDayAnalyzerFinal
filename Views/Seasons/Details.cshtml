@@ -61,7 +61,43 @@
             else
             {
                 <tr>
-                    <td colspan="3">No teams in the season.</td>
+                    <td colspan="1">No teams in @Model?.Name.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="col">
+    <h3>Goals list for @Model?.Name</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Goals</th>
+            </tr>
+
+
+        </thead>
+        <tbody>
+            @if (Model != null && Model.TeamsInSeason != null)
+            {
+                @foreach (var team in Model.TeamsInSeason)
+                {
+                    if (team != null)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => team.PlayersInTeam)</td>
+                            <td>@Html.DisplayFor(modelItem => team.Name)</td>
+                        </tr>
+                    }
+                }
+            }
+
+            else
+            {
+                <tr>
+                    <td colspan="3">No matches attended.</td>
                 </tr>
             }
         </tbody>

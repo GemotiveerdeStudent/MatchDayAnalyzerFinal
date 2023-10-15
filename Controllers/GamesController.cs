@@ -27,6 +27,8 @@ namespace MatchDayAnalyzerFinal.Controllers
                           Problem("Entity set 'MatchAnalyzerDbContext.Games'  is null.");
         }
 
+
+
         // GET: Games/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -36,7 +38,11 @@ namespace MatchDayAnalyzerFinal.Controllers
             }
 
             var game = await _context.Games
+                .Include(t => t.TeamsPlayedGame)
+                .Include(t => t.AttendanceSheets)
+                    .ThenInclude(t => t.Player)
                 .FirstOrDefaultAsync(m => m.Id == id);
+                
             if (game == null)
             {
                 return NotFound();

@@ -6,9 +6,9 @@
         public byte Attend { get; set; }
         public int PriceToPayPerPlayer { get; set; }
         public int MatchGoal { get; set; }
-        public Player? Player { get; set; }
+        public virtual Player? Player { get; set; }
         public int PlayerId { get; set; }
-        public Game? Game { get; set; }
+        public virtual Game? Game { get; set; }
         public int GameId { get; set; }
     }
 }

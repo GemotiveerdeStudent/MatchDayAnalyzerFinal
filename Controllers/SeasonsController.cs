@@ -36,7 +36,8 @@ namespace MatchDayAnalyzerFinal.Controllers
             }
 
             var season = await _context.Seasons
-                .Include(t => t.TeamsInSeason)
+                .Include(t => t.TeamsInSeason!)
+                    .ThenInclude(t => t.PlayersInTeam)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (season == null)
             {
@@ -45,7 +46,6 @@ namespace MatchDayAnalyzerFinal.Controllers
 
             return View(season);
         }
-
         // GET: Seasons/Create
         public IActionResult Create()
         {

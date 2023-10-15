@@ -19,6 +19,16 @@ namespace MatchDayAnalyzerFinal.Data
             /*        string connection = @"Data Source=.;Initial Catalog=MatchdayAnalyzer;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
                       optionsBuilder.UseSqlServer(connection); */
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Game>()
+                .HasMany(x => x.TeamsPlayedGame)
+                .WithMany(y => y.Games)
+                .UsingEntity(j => j.ToTable("GameTeam"));
+
+            base.OnModelCreating(builder);
+        }
         public MatchAnalyzerDbContext(DbContextOptions<MatchAnalyzerDbContext> contextOptions) : base(contextOptions)
         {
 

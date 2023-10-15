@@ -1,8 +1,10 @@
 ﻿using MatchDayAnalyzerFinal.Data;
 using MatchDayAnalyzerFinal.Models;
 using MatchDayAnalyzerFinal.Models.ClassModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Diagnostics;
 
 namespace MatchDayAnalyzerFinal.Controllers
@@ -18,11 +20,15 @@ namespace MatchDayAnalyzerFinal.Controllers
             _context = context;
         }
 
+        [ResponseCache(Duration = 10 /* seconds */,
+            Location = ResponseCacheLocation.Any)]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Route("Private")]
+        [Authorize(Roles = "Coach")]
         public IActionResult Privacy()
         {
             return View();

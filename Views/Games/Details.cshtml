@@ -40,3 +40,38 @@
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<div class="col">
+    <h3>Players participated in this match</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Player Name</th>
+                <th>Price to pay per player</th>
+                <th>Total Goals</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.AttendanceSheets != null)
+            {
+                @foreach (var game in Model.AttendanceSheets)
+                {
+                    @if (game != null)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => game.Player.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => game.PriceToPayPerPlayer)</td>
+                            <td>@Html.DisplayFor(modelItem => game.MatchGoal)</td>
+                        </tr>
+                    }
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3">No players in the team.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

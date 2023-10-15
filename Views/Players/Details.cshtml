@@ -4,6 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
+@*            Default generated code
+
+*@
+
 <h1>Details</h1>
 
 <div>
@@ -45,4 +49,103 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
+</div>
+
+
+<div class="col">
+    <h3>Total price to pay for @Model?.Name </h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Number of attendances</th>
+                <th>Total price to pay</th>
+            </tr>
+        </thead>
+        <tbody>
+
+@*            Check follow things in the if statement : 
+              If the Model object is not null.
+              If the AttendanceSheets property of the Model object is not null.
+              If the AttendanceSheets collection has at least one element.
+*@
+
+            @if (Model != null && Model.AttendanceSheets != null && Model.AttendanceSheets.Any())
+            {
+                @foreach (var game in Model.AttendanceSheets)
+                {
+                    if (game != null)
+                    {
+                        <tr>
+                            <td>
+                                @{
+                                    //Count the number of times the player has attended a match.
+                                    var totalAttendances = Model.AttendanceSheets.Count();
+                                }
+
+                                @totalAttendances
+                            </td>
+
+                            <td>
+                                @{
+                                    //Show the amount of the money the player has to pay for all attendances he was in.
+                                    var totalAmount = Model.AttendanceSheets.Sum(attendanceSheet => attendanceSheet.PriceToPayPerPlayer);
+                                }
+
+                                 @totalAmount
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="2">Player has not played any games this season.</td>
+                    <td colspan="2">Player does not have to pay anything</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+
+<div class="col">
+    <h3>Attendances for @Model?.Name</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Opponent played against</th>
+                <th>Price to pay for this match</th>
+                <th>Goals in this match</th>
+
+            </tr>
+
+
+        </thead>
+        <tbody>
+            @if (Model != null && Model.AttendanceSheets != null)
+            {
+                @foreach (var attendanceSheet in Model.AttendanceSheets)
+                {
+
+                    if (attendanceSheet.Game != null)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => attendanceSheet.Game.OpponentTeam)</td>
+                            <td>@Html.DisplayFor(modelItem => attendanceSheet.PriceToPayPerPlayer)</td>
+                            <td>@Html.DisplayFor(modelItem => attendanceSheet.MatchGoal)</td>
+                        </tr>
+                    }
+                }
+            }
+
+            else
+            {
+                <tr>
+                    <td colspan="3">No matches attended.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

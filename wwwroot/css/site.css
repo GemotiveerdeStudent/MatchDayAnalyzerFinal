@@ -27,3 +27,13 @@ body {
 .nav-link {
     color: white;
 }
+
+.nav-item dropdown {
+    text-decoration-color  : white;
+}
+.dropdown menu {
+    color: white;
+}
+.dropdown-toggle {
+    color: white;
+}

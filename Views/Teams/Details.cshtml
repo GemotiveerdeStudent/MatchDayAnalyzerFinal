@@ -35,7 +35,7 @@
     <a asp-action="Index">Back to List</a>
 </div>
 <div class="col">
-    <h3>Players in Team</h3>
+    <h3>Players in @Model?.Name</h3>
     <table class="table">
         <thead>
             <tr>
@@ -45,6 +45,7 @@
             </tr>
         </thead>
         <tbody>
+            
             @if (Model != null && Model.PlayersInTeam != null)
             {
                 @foreach (var player in Model.PlayersInTeam)
@@ -55,6 +56,43 @@
                             <td>@Html.DisplayFor(modelItem => player.Name)</td>
                             <td>@Html.DisplayFor(modelItem => player.Position)</td>
                             <td>@Html.DisplayFor(modelItem => player.TotalGoals)</td>
+                        </tr>
+                    }
+                }
+            
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3">No players in the team.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div class="col">
+    <h3>Matches played by @Model?.Name</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Opponent Team</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model?.Games != null)
+            {
+                @foreach (var game in Model.Games!)
+                {
+                    @if (game != null)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => game.DateTime)</td>
+                            <td>@Html.DisplayFor(modelItem => game.OpponentTeam)</td>
+                            <td>@Html.DisplayFor(modelItem => game.HomeTeamScore) - @Html.DisplayFor(modelItem => game.AwayTeamScore)</td>
                         </tr>
                     }
                 }
