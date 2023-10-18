@@ -1,4 +1,6 @@
 using MatchDayAnalyzerFinal.Data;
+using MatchDayAnalyzerFinal.Interfaces;
+using MatchDayAnalyzerFinal.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +19,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages();
+
+// Wire up dependency injection. Explicitly telling the program how i used the injection.
+builder.Services.AddScoped<IGameRepository, GameRepository>();
 
 // API documentatie
 builder.Services.AddEndpointsApiExplorer();

@@ -26,9 +26,9 @@ namespace MatchDayAnalyzerFinal.Controllers
         {
             return View();
         }
-
-        [Route("Private")]
-        [Authorize(Roles = "Coach")]
+//        Making the API only accesible for Coaches and not for players. Something for future projects.
+//        [Route("Private")]
+//        [Authorize(Roles = "Coach")]
         public IActionResult Privacy()
         {
             return View();
