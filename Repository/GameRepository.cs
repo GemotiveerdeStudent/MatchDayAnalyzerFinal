@@ -19,6 +19,10 @@ namespace MatchDayAnalyzerFinal.Repository
         {
             return _context.Games.Any(g => g.Id == id);
         }
+        public bool OpponentExists(string opponentTeam)
+        {
+            return _context.Games.Any(g => g.OpponentTeam == opponentTeam);
+        }
 
         public Game GetGame(string opponentTeam)
         {
@@ -31,7 +35,7 @@ namespace MatchDayAnalyzerFinal.Repository
             return _context.Games.OrderBy(p => p.Id).ToList();
         }
 
-        public Game GetGames(int id)
+        public Game GetGamesId(int id)
         {
             // Return just one game
             return _context.Games.Where(g => g.Id == id).FirstOrDefault();

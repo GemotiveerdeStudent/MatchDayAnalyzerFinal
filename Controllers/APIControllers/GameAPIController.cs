@@ -1,5 +1,8 @@
-﻿using MatchDayAnalyzerFinal.Interfaces;
+﻿using AutoMapper;
+using MatchDayAnalyzerFinal.Dto;
+using MatchDayAnalyzerFinal.Interfaces;
 using MatchDayAnalyzerFinal.Models.ClassModels;
+using MatchDayAnalyzerFinal.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 // Controller has been generated 
@@ -11,10 +14,12 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
     {
         // Reference to Repository for database calls
         private readonly IGameRepository _gameRepository;
+        private readonly IMapper _mapper;
 
-        public GameAPIController(IGameRepository gameRepository)
+        public GameAPIController(IGameRepository gameRepository, IMapper mapper)
         {
             this._gameRepository = gameRepository;
+            this._mapper = mapper;
         }
         // GET: api/<ValuesController>
         // Reference to repository to make the database calls.
@@ -22,7 +27,8 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Game>))]
         public IActionResult GetGames()
         {
-            var games = _gameRepository.GetGames();
+            // Linking to automapper tog et rid of nullable values.
+            var games = _mapper.Map<List<GameDto>>(_gameRepository.GetGames());
 
             if(!ModelState.IsValid)
                 return BadRequest(games);
@@ -31,28 +37,44 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
         }
 
         // GET api/<ValuesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{gameId}")]
+        [ProducesResponseType(200, Type = typeof(Game))]
+        [ProducesResponseType(400)]
+        public IActionResult GetGamesId(int gameId)
         {
-            return "value";
+            if (!_gameRepository.GameExists(gameId))
+                return NotFound();
+            // Linking to automapper to get rid of nullable values
+            var game = _mapper.Map<GameDto>(_gameRepository.GetGamesId(gameId));
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(game);
         }
 
-        // POST api/<ValuesController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+
+        [HttpGet("Game/{opponentTeam}")]
+        [ProducesResponseType(200, Type = typeof(GameDto))]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public IActionResult GetGame(string opponentTeam)
         {
+            if (!_gameRepository.OpponentExists(opponentTeam))
+                return NotFound();
+
+            var game = _gameRepository.GetGame(opponentTeam);
+
+            if (game == null)
+                return NotFound();
+
+            var gameDto = _mapper.Map<GameDto>(game);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(gameDto);
         }
 
-        // PUT api/<ValuesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<ValuesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

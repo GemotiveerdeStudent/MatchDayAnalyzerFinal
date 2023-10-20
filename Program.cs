@@ -3,6 +3,7 @@ using MatchDayAnalyzerFinal.Interfaces;
 using MatchDayAnalyzerFinal.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,9 +20,19 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages();
-
+// When i have Many to may relationships it will get stuck in a loop, with this piece of code it will finsih the loop and move towards the requested data.
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+// Wire up Automapper (is in helper folder)
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Wire up dependency injection. Explicitly telling the program how i used the injection.
 builder.Services.AddScoped<IGameRepository, GameRepository>();
+builder.Services.AddScoped<IAttendanceSheetRepository, AttendanceSheetRepository>();
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
+builder.Services.AddScoped<ISeasonRepository, SeasonRepository>();
+builder.Services.AddScoped<ITeamRepository, TeamRepostory>();
+
+
 
 // API documentatie
 builder.Services.AddEndpointsApiExplorer();
