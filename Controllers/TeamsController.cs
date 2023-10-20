@@ -35,13 +35,13 @@ namespace MatchDayAnalyzerFinal.Controllers
             }
 
             var team = await _context.Teams
-                
+
                 .Include(t => t.Season)
-                    
+
                 .Include(t => t.PlayersInTeam)
                 .Include(t => t.Games!)
                     .ThenInclude(gt => gt.TeamsPlayedGame)
-                    
+
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (team == null)
@@ -164,14 +164,14 @@ namespace MatchDayAnalyzerFinal.Controllers
             {
                 _context.Teams.Remove(team);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TeamExists(int id)
         {
-          return (_context.Teams?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Teams?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

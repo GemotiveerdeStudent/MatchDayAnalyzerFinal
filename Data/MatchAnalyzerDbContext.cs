@@ -25,7 +25,12 @@ namespace MatchDayAnalyzerFinal.Data
             builder.Entity<Game>()
                 .HasMany(x => x.TeamsPlayedGame)
                 .WithMany(y => y.Games)
-                .UsingEntity(j => j.ToTable("GameTeam"));
+                .UsingEntity(
+                    "GameTeam",
+                    g => g.HasOne(typeof(Game)).WithMany().HasForeignKey("GameId").HasPrincipalKey(nameof(Game.Id)),
+                    t => t.HasOne(typeof(Team)).WithMany().HasForeignKey("TeamId").HasPrincipalKey(nameof(Team.Id)),
+                    j => j.HasKey("GameId", "TeamId")
+                );
 
             base.OnModelCreating(builder);
         }

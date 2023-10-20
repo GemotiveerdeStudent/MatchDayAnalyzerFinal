@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MatchDayAnalyzerFinal.Data;
 using MatchDayAnalyzerFinal.Models.ClassModels;
+using MatchDayAnalyzerFinal.Models.ViewModels;
+
 
 namespace MatchDayAnalyzerFinal.Controllers
 {
@@ -54,6 +56,7 @@ namespace MatchDayAnalyzerFinal.Controllers
         // GET: Games/Create
         public IActionResult Create()
         {
+            var gameViewModel = new GameViewModel { };
             return View();
         }
 
@@ -62,15 +65,27 @@ namespace MatchDayAnalyzerFinal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DateTime,OpponentTeam,HomeTeamScore,AwayTeamScore")] Game game)
+        public async Task<IActionResult> Create([Bind("Id,DateTime,OpponentTeam,HomeTeamScore,AwayTeamScore")] GameViewModel gameUpdate)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(game);
+                Game CreateGame = new Game()
+                {
+                    Id = gameUpdate.Id,
+                    DateTime = gameUpdate.DateTime,
+                    OpponentTeam = gameUpdate.OpponentTeam,
+                    HomeTeamScore = gameUpdate.HomeTeamScore,
+                    AwayTeamScore = gameUpdate?.AwayTeamScore
+                };
+                AddOrUpdateTeams(CreateGame, gameUpdate.TeamsPlayedGame);
+                _context.Add(CreateGame);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+                    
+                
             }
-            return View(game);
+            
+            return View(gameUpdate);
         }
 
         // GET: Games/Edit/5
@@ -86,6 +101,15 @@ namespace MatchDayAnalyzerFinal.Controllers
             {
                 return NotFound();
             }
+            GameViewModel viewmodel = new()
+            {
+                Id = game.Id,
+                DateTime = game.DateTime,
+                OpponentTeam = game.OpponentTeam,
+                HomeTeamScore = game.HomeTeamScore,
+                AwayTeamScore = game?.AwayTeamScore
+            };
+
             return View(game);
         }
 
@@ -94,9 +118,9 @@ namespace MatchDayAnalyzerFinal.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DateTime,OpponentTeam,HomeTeamScore,AwayTeamScore")] Game game)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,DateTime,OpponentTeam,HomeTeamScore,AwayTeamScore")] GameViewModel gameUpdate)
         {
-            if (id != game.Id)
+            if (id != gameUpdate.Id)
             {
                 return NotFound();
             }
@@ -105,12 +129,18 @@ namespace MatchDayAnalyzerFinal.Controllers
             {
                 try
                 {
-                    _context.Update(game);
+                    Game? gameEdit = await _context.Games.FindAsync(id);
+                    gameEdit.DateTime = gameUpdate.DateTime;
+                    gameEdit.OpponentTeam= gameUpdate.OpponentTeam;
+                    gameEdit.HomeTeamScore = gameUpdate.HomeTeamScore;
+                    gameEdit.AwayTeamScore = gameUpdate.AwayTeamScore;
+                    AddOrUpdateTeams(gameEdit, gameUpdate.TeamsPlayedGame);
+                    _context.Update(gameEdit);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GameExists(game.Id))
+                    if (!GameExists(gameUpdate.Id))
                     {
                         return NotFound();
                     }
@@ -121,7 +151,7 @@ namespace MatchDayAnalyzerFinal.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(game);
+            return View(gameUpdate);
         }
 
         // GET: Games/Delete/5
@@ -164,6 +194,22 @@ namespace MatchDayAnalyzerFinal.Controllers
         private bool GameExists(int id)
         {
           return (_context.Games?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private void AddOrUpdateTeams(Game game, IEnumerable<AssignedTeamViewModel> assignedTeams)
+        {
+            if (assignedTeams != null)
+            {
+                foreach (var assignedTeam in assignedTeams)
+                {
+                    if (assignedTeam.Assigned)
+                    {
+                        var newTeam = new Team { Id = assignedTeam.Id, Name = assignedTeam.OpponentTeam };
+                        _context.Teams.Attach(newTeam);
+                        game.TeamsPlayedGame.Add(newTeam);
+                    }
+                }
+            }
         }
     }
 }
