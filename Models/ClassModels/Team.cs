@@ -13,5 +13,10 @@ namespace MatchDayAnalyzerFinal.Models.ClassModels
         public virtual ICollection<Player>? PlayersInTeam { get; set; }
         public virtual ICollection<Game>? Games { get; set; }
         public byte? TeamPicture { get; set; }
+
+        public Team()
+        {
+            Games = new List<Game>();
+        }
     }
 }
