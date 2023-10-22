@@ -9,7 +9,6 @@ namespace MatchDayAnalyzerFinal.Dto
         [Required]
         [StringLength(50)]
         public string? Name { get; set; }
-        public Season? Season { get; set; }
         public int? SeasonId { get; set; }
         public byte? TeamPicture { get; set; }
 

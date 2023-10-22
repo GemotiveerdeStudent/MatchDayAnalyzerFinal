@@ -13,11 +13,13 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
     {
         // Reference to Repository for database calls
         private readonly IPlayerRepository _playerRepository;
+        private readonly ITeamRepository _teamRepository;
         private readonly IMapper _mapper;
 
-        public PlayerAPIController(IPlayerRepository playerRepository, IMapper mapper)
+        public PlayerAPIController(IPlayerRepository playerRepository, ITeamRepository teamRepository, IMapper mapper)
         {
             _playerRepository = playerRepository;
+            _teamRepository = teamRepository;
             _mapper = mapper;
         }
         // GET: api/<ValuesController>
@@ -79,7 +81,7 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreatePlayer([FromBody] PlayerDto playerCreate)
+        public IActionResult CreatePlayer([FromQuery] int teamId , [FromBody] PlayerDto playerCreate)
         {
             if (playerCreate == null)
                 return BadRequest(ModelState);
@@ -96,7 +98,7 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
 
             var playerMap = _mapper.Map<Player>(playerCreate);
 
-            if (!_playerRepository.CreatePlayer(playerMap))
+            if (!_playerRepository.CreatePlayer(teamId, playerMap))
             {
                 ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
@@ -104,5 +106,59 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
 
             return Ok("Successfully created");
         }
+
+        [HttpPut("{playerId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdatePlayer(int playerId,[FromQuery] int teamId, [FromBody] PlayerDto updateplayer)
+        {
+            if (updateplayer == null)
+                return BadRequest(ModelState);
+
+            if (playerId != updateplayer.Id)
+                return BadRequest(ModelState);
+
+            if (!_playerRepository.PlayerExists(playerId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var playerMap = _mapper.Map<Player>(updateplayer);
+
+            if (!_playerRepository.UpdatePlayer(teamId, playerMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating the player");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok();
+        }
+
+        [HttpDelete("playerId")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeletePlayer(int playerId)
+        {
+            if (!_playerRepository.PlayerExists(playerId))
+            {
+                return NotFound();
+            }
+
+            var PlayerToDelete = _playerRepository.GetPlayer(playerId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (_playerRepository.DeletePlayer(PlayerToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting Player");
+            }
+
+            return NoContent();
+        }
+
     }
 }

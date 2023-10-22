@@ -43,7 +43,7 @@ namespace MatchDayAnalyzerFinal.Repository
             return _context.Players.Any(p => p.Id == id);
         }
 
-        public bool CreatePlayer(Player player)
+        public bool CreatePlayer(int teamId, Player player)
         {
             _context.Add(player);
             return Save();
@@ -53,6 +53,18 @@ namespace MatchDayAnalyzerFinal.Repository
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public bool UpdatePlayer(int teamId, Player player)
+        {
+            _context.Update(player);
+            return Save();
+        }
+
+        public bool DeletePlayer(Player player)
+        {
+            _context.Remove(player);
+            return Save();
         }
     }
 }

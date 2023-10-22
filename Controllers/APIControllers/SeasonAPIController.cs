@@ -105,6 +105,59 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
             return Ok("Successfully created");
         }
 
+        [HttpPut("{seasonId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateSeason(int seasonId, [FromBody] SeasonDto updateSeason)
+        {
+            if (updateSeason == null)
+                return BadRequest(ModelState);
+
+            if (seasonId != updateSeason.Id)
+                return BadRequest(ModelState);
+
+            if (!_seasonRepository.SeasonExists(seasonId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var seasonMap = _mapper.Map<Season>(updateSeason);
+
+            if (!_seasonRepository.UpdateSeason(seasonMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating the attendancesheet");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok();
+        }
+
+        [HttpDelete("seasonId")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteSeason(int seasonId)
+        {
+            if (!_seasonRepository.SeasonExists(seasonId))
+            {
+                return NotFound();
+            }
+
+            var SeasonToDelete = _seasonRepository.GetSeasonById(seasonId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (_seasonRepository.DeleteSeason(SeasonToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting Season");
+            }
+
+            return NoContent();
+        }
+
 
     }
 }

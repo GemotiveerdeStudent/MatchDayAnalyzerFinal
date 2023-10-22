@@ -41,15 +41,27 @@ namespace MatchDayAnalyzerFinal.Repository
                 .ToList();
         }
 
-        public bool PlayerExists(int id)
+        public bool TeamExists(int id)
         {
-            return _context.Players.Any(p => p.Id == id);
+            return _context.Teams.Any(p => p.Id == id);
         }
 
         public bool Save()
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public bool UpdateTeam(Team team)
+        {
+            _context.Update(team);
+            return Save();
+        }
+
+        public bool DeleteTeam(Team team)
+        {
+            _context.Remove(team);
+            return Save();
         }
     }
 }

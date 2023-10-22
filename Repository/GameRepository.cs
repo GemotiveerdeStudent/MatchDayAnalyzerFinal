@@ -53,5 +53,17 @@ namespace MatchDayAnalyzerFinal.Repository
             var saved = _context.SaveChanges();
             return saved >0 ? true : false;
         }
+
+        public bool UpdateGame(Game game)
+        {
+            _context.Update(game);
+            return Save();
+        }
+
+        public bool DeleteGame(Game game)
+        {
+            _context.Remove(game);
+            return Save();
+        }
     }
 }

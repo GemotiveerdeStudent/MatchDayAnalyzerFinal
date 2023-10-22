@@ -10,6 +10,5 @@ namespace MatchDayAnalyzerFinal.Dto
         public int PlayerId { get; set; }
         public int GameId { get; set; }
         public bool Attend { get; set; } 
-        public Player Player { get; set; }
     }
 }

@@ -15,9 +15,10 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
     {
         // Reference to Repository for database calls
         private readonly IAttendanceSheetRepository _attendanceSheetRepository;
+ //       private readonly IPlayerRepository _playerRepository;
         private readonly IMapper? _mapper;
 
-        public AttendanceSheetAPIController(IAttendanceSheetRepository attendanceSheetRepository, IMapper mapper)
+        public AttendanceSheetAPIController(IAttendanceSheetRepository attendanceSheetRepository ,IMapper mapper)
         {
             _attendanceSheetRepository = attendanceSheetRepository;
             _mapper = mapper;
@@ -76,8 +77,9 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
             if (attendanceSheetCreate == null)
                 return BadRequest(ModelState);
 
+            // Assuming PlayerId is an integer, directly compare it with a.PlayerId
             var attendanceSheet = _attendanceSheetRepository.GetAttendanceSheets()
-                .FirstOrDefault(a => a.Player.Name.Trim().ToUpper() == attendanceSheetCreate.Player.Name.TrimEnd().ToUpper());
+                .FirstOrDefault(a => a.PlayerId == attendanceSheetCreate.PlayerId);
 
             if (attendanceSheet != null)
             {
@@ -97,7 +99,59 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
         }
 
 
+        [HttpPut("{Id}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateAttendanceSheet(int id, [FromBody] AttendanceSheetDto updatedattendanceSheet)
+        {
+            if (updatedattendanceSheet == null) 
+                return BadRequest(ModelState);
 
+            if (id != updatedattendanceSheet.Id)
+                return BadRequest(ModelState);
+
+            if (!_attendanceSheetRepository.AttendanceSheetExists(id))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var attendanceSheetMap = _mapper.Map<AttendanceSheet>(updatedattendanceSheet);
+
+            if (!_attendanceSheetRepository.UpdateAttendanceSheet(attendanceSheetMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating the attendancesheet");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok();
+        }
+
+        [HttpDelete("id")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteAttendanceSheet(int attendanceId)
+        {
+            if (!_attendanceSheetRepository.AttendanceSheetExists(attendanceId))
+            {
+                return NotFound();
+            }
+
+            var AttendanceToDelete = _attendanceSheetRepository.GetAttendanceSheetsId(attendanceId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (_attendanceSheetRepository.DeleteAttendanceSheet(AttendanceToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting Attendance");
+            }
+
+            return NoContent();
+ 
+        }
 
     }
 }

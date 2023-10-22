@@ -10,6 +10,8 @@ namespace MatchDayAnalyzerFinal.Interfaces
         ICollection<Game> GetGamesSheetsByAttendanceSheet(int GameId);
         bool AttendanceSheetExists(int id);
         bool CreateAttendanceSheet(AttendanceSheet attendanceSheet);
+        bool UpdateAttendanceSheet(AttendanceSheet attendanceSheet);
+        bool DeleteAttendanceSheet(AttendanceSheet attendanceSheet);
         bool Save();
 
 

@@ -8,8 +8,10 @@ namespace MatchDayAnalyzerFinal.Interfaces
         ICollection<Team> GetTeams();
         Team GetTeam(int id);
         IEnumerable<Team> GetPlayersByTeam(int teamId);
-        bool PlayerExists(int id);
+        bool TeamExists(int id);
         bool CreateTeam(Team team);
+        bool UpdateTeam(Team team);
+        bool DeleteTeam(Team team);
         bool Save();
     }
 }

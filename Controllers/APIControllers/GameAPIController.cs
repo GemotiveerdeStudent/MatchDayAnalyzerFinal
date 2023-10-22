@@ -104,5 +104,60 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
 
             return Ok("Successfully created");
         }
+
+        [HttpPut("{gameId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateGame(int gameId, [FromBody] GameDto updategame)
+        {
+            if (updategame == null)
+                return BadRequest(ModelState);
+
+            if (gameId != updategame.Id)
+                return BadRequest(ModelState);
+
+            if (!_gameRepository.GameExists(gameId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var gameMap = _mapper.Map<Game>(updategame);
+
+            if (!_gameRepository.UpdateGame(gameMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating the attendancesheet");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok();
+        }
+
+        [HttpDelete("id")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteGame(int gameId)
+        {
+            if (!_gameRepository.GameExists(gameId))
+            {
+                return NotFound();
+            }
+
+            var GameToDelete = _gameRepository.GetGamesId(gameId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (_gameRepository.DeleteGame(GameToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting Attendance");
+            }
+
+            return NoContent();
+
+        }
+
     }
 }

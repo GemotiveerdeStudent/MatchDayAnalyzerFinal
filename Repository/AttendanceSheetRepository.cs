@@ -53,5 +53,17 @@ namespace MatchDayAnalyzerFinal.Repository
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
+
+        public bool UpdateAttendanceSheet(AttendanceSheet attendanceSheet)
+        {
+            _context.Update(attendanceSheet);
+                return Save();
+        }
+
+        public bool DeleteAttendanceSheet(AttendanceSheet attendanceSheet)
+        {
+            _context.Remove(attendanceSheet);
+                return Save();
+        }
     }
 }

@@ -11,6 +11,5 @@ namespace MatchDayAnalyzerFinal.Dto
         public string? Name { get; set; }
         public DateTime? Date { get; set; }
         public int? TotalPrice { get; set; }
-        public virtual ICollection<Team>? TeamsInSeason { get; set; }
     }
 }

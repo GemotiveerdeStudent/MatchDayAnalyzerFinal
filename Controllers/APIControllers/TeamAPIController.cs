@@ -42,7 +42,7 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
         [ProducesResponseType(400)]
         public IActionResult GetTeam(int teamId)
         {
-            if (!_teamRepository.PlayerExists(teamId))
+            if (!_teamRepository.TeamExists(teamId))
                 return NotFound();
 
             var team = _teamRepository.GetTeam(teamId);
@@ -105,5 +105,61 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
 
             return Ok("Successfully created");
         }
+
+
+        [HttpPut("{teamId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateSeason(int teamId, [FromBody] TeamDto updateTeam)
+        {
+            if (updateTeam == null)
+                return BadRequest(ModelState);
+
+            if (teamId != updateTeam.Id)
+                return BadRequest(ModelState);
+
+            if (!_teamRepository.TeamExists(teamId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var teamMap = _mapper.Map<Team>(updateTeam);
+
+            if (!_teamRepository.UpdateTeam(teamMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating the attendancesheet");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok();
+        }
+
+        [HttpDelete("teamId")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteTeam(int teamId)
+        {
+            if (!_teamRepository.TeamExists(teamId))
+            {
+                return NotFound();
+            }
+
+            var TeamToDelete = _teamRepository.GetTeam(teamId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (_teamRepository.DeleteTeam(TeamToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting Season");
+            }
+
+            return NoContent();
+        }
+
+
     }
 }

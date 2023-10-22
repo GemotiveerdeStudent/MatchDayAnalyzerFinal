@@ -9,7 +9,9 @@ namespace MatchDayAnalyzerFinal.Interfaces
         Player GetPlayer(int id);
         IEnumerable<Player> GetPlayersByTeam(int teamId);
         bool PlayerExists(int id);
-        bool CreatePlayer(Player player);
+        bool CreatePlayer(int teamId, Player player);
+        bool UpdatePlayer(int teamId, Player player);
+        bool DeletePlayer(Player player);
         bool Save();
     }
 }

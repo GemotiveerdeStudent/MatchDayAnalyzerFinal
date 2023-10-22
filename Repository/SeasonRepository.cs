@@ -22,6 +22,12 @@ namespace MatchDayAnalyzerFinal.Repository
             return Save();
         }
 
+        public bool DeleteSeason(Season season)
+        {
+            _context.Remove(season);
+            return Save();
+        }
+
         public Season GetSeasonById(int id)
         {
             return _context.Seasons.
@@ -53,6 +59,12 @@ namespace MatchDayAnalyzerFinal.Repository
         public bool SeasonExists(int id)
         {
             return _context.Seasons.Any(p => p.Id == id);
+        }
+
+        public bool UpdateSeason(Season season)
+        {
+            _context.Update(season);
+            return Save();
         }
     }
 }
