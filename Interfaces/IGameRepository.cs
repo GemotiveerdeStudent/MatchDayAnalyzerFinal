@@ -10,6 +10,8 @@ namespace MatchDayAnalyzerFinal.Interfaces
         Game GetGame (string opponentTeam);
         bool GameExists(int id);
         bool OpponentExists(string opponentTeam);
+        bool CreateGame(Game game);
+        bool Save();
     }
 }
 

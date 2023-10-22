@@ -77,5 +77,33 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
 
             return Ok(playerDtos);
         }
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateTeam([FromBody] TeamDto teamCreate)
+        {
+            if (teamCreate == null)
+                return BadRequest(ModelState);
+
+            var game = _teamRepository.GetTeams()
+                .Where(c => c.Name.Trim().ToUpper() == teamCreate.Name.TrimEnd().ToUpper())
+                .FirstOrDefault();
+
+            if (game != null)
+            {
+                ModelState.AddModelError("", "Player already attended to the match");
+                return StatusCode(422, ModelState);
+            }
+
+            var teamMap = _mapper.Map<Team>(teamCreate);
+
+            if (!_teamRepository.CreateTeam(teamMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
+        }
     }
 }

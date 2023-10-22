@@ -16,6 +16,12 @@ namespace MatchDayAnalyzerFinal.Repository
             _context = context;
         }
 
+        public bool CreateSeason(Season season)
+        {
+            _context.Add(season);
+            return Save();
+        }
+
         public Season GetSeasonById(int id)
         {
             return _context.Seasons.
@@ -38,6 +44,11 @@ namespace MatchDayAnalyzerFinal.Repository
             return season?.TeamsInSeason.ToList() ?? new List<Team>();
         }
 
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
 
         public bool SeasonExists(int id)
         {

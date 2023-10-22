@@ -76,6 +76,34 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
 
             return Ok(teamsDto);
         }
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreateSeason([FromBody] SeasonDto seasonCreate)
+        {
+            if (seasonCreate == null)
+                return BadRequest(ModelState);
+
+            var season = _seasonRepository.GetSeasons()
+                .Where(c => c.Name.Trim().ToUpper() == seasonCreate.Name.TrimEnd().ToUpper())
+                .FirstOrDefault();
+
+            if (season != null)
+            {
+                ModelState.AddModelError("", "Player already attended to the match");
+                return StatusCode(422, ModelState);
+            }
+
+            var seasonMap = _mapper.Map<Season>(seasonCreate);
+
+            if (!_seasonRepository.CreateSeason(seasonMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
+        }
 
 
     }

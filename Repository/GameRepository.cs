@@ -1,6 +1,7 @@
 ﻿using MatchDayAnalyzerFinal.Data;
 using MatchDayAnalyzerFinal.Interfaces;
 using MatchDayAnalyzerFinal.Models.ClassModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace MatchDayAnalyzerFinal.Repository
 {
@@ -39,6 +40,18 @@ namespace MatchDayAnalyzerFinal.Repository
         {
             // Return just one game
             return _context.Games.Where(g => g.Id == id).FirstOrDefault();
+        }
+
+        public bool CreateGame(Game game)
+        {
+            _context.Add(game);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved >0 ? true : false;
         }
     }
 }

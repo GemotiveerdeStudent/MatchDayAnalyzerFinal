@@ -9,5 +9,7 @@ namespace MatchDayAnalyzerFinal.Interfaces
         Season GetSeasonById(int id);
         IEnumerable<Team> GetTeamsPlayingInSeason(int seasonId);
         bool SeasonExists(int id);
+        bool CreateSeason(Season season);
+        bool Save();
     }
 }

@@ -9,5 +9,7 @@ namespace MatchDayAnalyzerFinal.Interfaces
         Team GetTeam(int id);
         IEnumerable<Team> GetPlayersByTeam(int teamId);
         bool PlayerExists(int id);
+        bool CreateTeam(Team team);
+        bool Save();
     }
 }

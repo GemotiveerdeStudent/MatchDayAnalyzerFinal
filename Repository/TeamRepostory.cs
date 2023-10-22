@@ -14,6 +14,13 @@ namespace MatchDayAnalyzerFinal.Repository
         {
             _context = context;
         }
+
+        public bool CreateTeam(Team team)
+        {
+            _context.Add(team);
+            return Save();
+        }
+
         public IEnumerable<Team> GetPlayersByTeam(int teamId)
         {
             return _context.Teams
@@ -37,6 +44,12 @@ namespace MatchDayAnalyzerFinal.Repository
         public bool PlayerExists(int id)
         {
             return _context.Players.Any(p => p.Id == id);
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

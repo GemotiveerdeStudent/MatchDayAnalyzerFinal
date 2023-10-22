@@ -76,5 +76,33 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
 
             return Ok(playerDtos);
         }
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult CreatePlayer([FromBody] PlayerDto playerCreate)
+        {
+            if (playerCreate == null)
+                return BadRequest(ModelState);
+
+            var game = _playerRepository.GetPlayers()
+                .Where(c => c.Name.Trim().ToUpper() == playerCreate.Name.TrimEnd().ToUpper())
+                .FirstOrDefault();
+
+            if (game != null)
+            {
+                ModelState.AddModelError("", "Player already attended to the match");
+                return StatusCode(422, ModelState);
+            }
+
+            var playerMap = _mapper.Map<Player>(playerCreate);
+
+            if (!_playerRepository.CreatePlayer(playerMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
+        }
     }
 }

@@ -42,5 +42,17 @@ namespace MatchDayAnalyzerFinal.Repository
         {
             return _context.Players.Any(p => p.Id == id);
         }
+
+        public bool CreatePlayer(Player player)
+        {
+            _context.Add(player);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
     }
 }

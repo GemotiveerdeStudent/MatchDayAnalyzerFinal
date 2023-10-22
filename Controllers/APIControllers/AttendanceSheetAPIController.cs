@@ -71,19 +71,18 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        //Take data form the body of the API (the way it is being presented there)
-        public IActionResult CreateCategory([FromBody]AttendanceSheetDto attendanceSheetCreate)
+        public IActionResult CreateAttendanceSheet([FromBody] AttendanceSheetDto attendanceSheetCreate)
         {
             if (attendanceSheetCreate == null)
                 return BadRequest(ModelState);
 
             var attendanceSheet = _attendanceSheetRepository.GetAttendanceSheets()
-                .Where(a => a.Player.Name)
+                .FirstOrDefault(a => a.Player.Name.Trim().ToUpper() == attendanceSheetCreate.Player.Name.TrimEnd().ToUpper());
 
-            if(attendanceSheet != null)
+            if (attendanceSheet != null)
             {
-                ModelState.AddModelError("","Player already attended to the match")
-                return StatusCode(422, ModelState)
+                ModelState.AddModelError("", "Player already attended to the match");
+                return StatusCode(422, ModelState);
             }
 
             var attendanceSheetMap = _mapper.Map<AttendanceSheet>(attendanceSheetCreate);
@@ -94,9 +93,9 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Succesfully created")
+            return Ok("Successfully created");
         }
-        
+
 
 
 
