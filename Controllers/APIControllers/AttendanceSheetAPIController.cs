@@ -5,6 +5,7 @@ using MatchDayAnalyzerFinal.Models.ClassModels;
 using MatchDayAnalyzerFinal.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 
 namespace MatchDayAnalyzerFinal.Controllers.APIControllers
 {
@@ -65,8 +66,38 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
                 return BadRequest();
 
             return Ok(games);
-
         }
+
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        //Take data form the body of the API (the way it is being presented there)
+        public IActionResult CreateCategory([FromBody]AttendanceSheetDto attendanceSheetCreate)
+        {
+            if (attendanceSheetCreate == null)
+                return BadRequest(ModelState);
+
+            var attendanceSheet = _attendanceSheetRepository.GetAttendanceSheets()
+                .Where(a => a.Player.Name)
+
+            if(attendanceSheet != null)
+            {
+                ModelState.AddModelError("","Player already attended to the match")
+                return StatusCode(422, ModelState)
+            }
+
+            var attendanceSheetMap = _mapper.Map<AttendanceSheet>(attendanceSheetCreate);
+
+            if (!_attendanceSheetRepository.CreateAttendanceSheet(attendanceSheetMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Succesfully created")
+        }
+        
+
 
 
     }

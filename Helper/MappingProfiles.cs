@@ -18,10 +18,15 @@ namespace MatchDayAnalyzerFinal.Helper
         public MappingProfiles()
         {
             CreateMap<Game, GameDto>();
+            CreateMap<GameDto, Game>();
             CreateMap<AttendanceSheet, AttendanceSheetDto>();
+            CreateMap<AttendanceSheetDto, AttendanceSheet>();
             CreateMap<Player, PlayerDto>();
+            CreateMap<PlayerDto, Player>();
             CreateMap<Team, TeamDto>();
+            CreateMap<TeamDto, Team>();
             CreateMap<Season, SeasonDto>();
+            CreateMap<SeasonDto, Season>();
         }
     }
 }

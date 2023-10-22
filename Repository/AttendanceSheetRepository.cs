@@ -34,5 +34,24 @@ namespace MatchDayAnalyzerFinal.Repository
         {
             return _context.AttendanceSheets.Any(sheet => sheet.Id == id);
         }
+
+        public bool CreateAttendanceSheet(AttendanceSheet attendanceSheet)
+        {
+            //Change tracker
+            // Adding updating modyfying
+            // connected vs disconnected
+            // EntityState.Added
+            _context.Add(attendanceSheet);
+            _context.SaveChanges();
+            return Save();
+        }
+
+        // Convert into sequel an put it in the databe. 
+        // This is when the actual SQL is going to be generated and added to database.
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
     }
 }
