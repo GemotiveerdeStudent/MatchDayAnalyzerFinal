@@ -5,7 +5,6 @@ using System.ComponentModel;
 
 namespace MatchDayAnalyzerFinal.Helper
 {
-    // Created mapping profile for SwaggerUI to prevent nullables.
     // Automapper automatically maps all the attributes. It prevents me from having to do this at every API method : 
                     //Id = gameUpdate.Id,
                     //DateTime = gameUpdate.DateTime,

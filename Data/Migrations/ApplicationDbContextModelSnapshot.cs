@@ -45,8 +45,8 @@ namespace MatchDayAnalyzerFinal.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<byte>("Attend")
-                        .HasColumnType("tinyint");
+                    b.Property<bool?>("Attend")
+                        .HasColumnType("bit");
 
                     b.Property<int>("GameId")
                         .HasColumnType("int");

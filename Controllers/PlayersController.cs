@@ -36,8 +36,6 @@ namespace MatchDayAnalyzerFinal.Controllers
 
             var player = await _context.Players
                 .Include(p => p.Team)
-                .Include(p => p.AttendanceSheets!)
-                    .ThenInclude(p => p.Game)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (player == null)
             {

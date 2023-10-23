@@ -94,7 +94,7 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
                 return StatusCode(422, ModelState);
             }
 
-            var seasonMap = _mapper.Map<Season>(seasonCreate);
+            var seasonMap = _mapper?.Map<Season>(seasonCreate);
 
             if (!_seasonRepository.CreateSeason(seasonMap))
             {
@@ -123,7 +123,7 @@ namespace MatchDayAnalyzerFinal.Controllers.APIControllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var seasonMap = _mapper.Map<Season>(updateSeason);
+            var seasonMap = _mapper?.Map<Season>(updateSeason);
 
             if (!_seasonRepository.UpdateSeason(seasonMap))
             {

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MatchDayAnalyzerFinal.Data;
 using MatchDayAnalyzerFinal.Models.ClassModels;
+using MatchDayAnalyzerFinal.Models.ViewModels;
 
 namespace MatchDayAnalyzerFinal.Controllers
 {

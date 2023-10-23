@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MatchDayAnalyzerFinal.Data.Migrations
 {
     [DbContext(typeof(MatchAnalyzerDbContext))]
-    [Migration("20231015162948_AddedWithMany&HasMany")]
-    partial class AddedWithManyHasMany
+    [Migration("20231023002330_Final")]
+    partial class Final
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,8 +48,8 @@ namespace MatchDayAnalyzerFinal.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<byte>("Attend")
-                        .HasColumnType("tinyint");
+                    b.Property<bool?>("Attend")
+                        .HasColumnType("bit");
 
                     b.Property<int>("GameId")
                         .HasColumnType("int");

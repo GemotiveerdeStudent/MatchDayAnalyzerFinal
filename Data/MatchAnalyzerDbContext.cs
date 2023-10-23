@@ -23,17 +23,15 @@ namespace MatchDayAnalyzerFinal.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Game>()
-                .HasMany(x => x.TeamsPlayedGame)
-                .WithMany(y => y.Games)
-                .UsingEntity(
-                    "GameTeam",
-                    g => g.HasOne(typeof(Game)).WithMany().HasForeignKey("GameId").HasPrincipalKey(nameof(Game.Id)),
-                    t => t.HasOne(typeof(Team)).WithMany().HasForeignKey("TeamId").HasPrincipalKey(nameof(Team.Id)),
-                    j => j.HasKey("GameId", "TeamId")
-                );
+                .HasMany(g => g.TeamsPlayedGame)
+                .WithMany(t => t.Games)
+                .UsingEntity(j => j.ToTable("GameTeam"));
 
             base.OnModelCreating(builder);
         }
+
+
+
         public MatchAnalyzerDbContext(DbContextOptions<MatchAnalyzerDbContext> contextOptions) : base(contextOptions)
         {
 
